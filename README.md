@@ -1,2 +1,2 @@
-# transformation-aggregate_accumulative
-Extension Transformation -> AggregateAccumulative function microservice of WDIAS
+# validation-min-non-missing-values-check
+Extension Validation -> MinNonMissingValuesCheck function microservice of WDIAS

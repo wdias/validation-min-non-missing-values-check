@@ -3,14 +3,14 @@ from flask import Blueprint, request, jsonify, json
 
 from web import util
 
-bp = Blueprint('aggregate_accumulative', __name__)
-callback_url = f'{util.HOST_URL}/extension/transformation/aggregate-accumulative'
+bp = Blueprint('min_non_missing_values_check', __name__)
+callback_url = f'{util.HOST_URL}/extension/validation/min-non-missing-values-check'
 
-""" Transformation Structure:
+""" Validation Structure:
 {
     extensionId: "",
     extension: enum("Transformation", "Validation", "Interpolation"),
-    function: "AggregateAccumulative",
+    function: "MinNonMissingValuesCheck",
     inputVariables: [
         {
             variableId: "",
@@ -37,10 +37,10 @@ callback_url = f'{util.HOST_URL}/extension/transformation/aggregate-accumulative
 """
 
 
-@bp.route('/extension/transformation/aggregate-accumulative', methods=['POST'])
-def extension_transformation_aggregate_accumulative():
+@bp.route('/extension/validation/min-non-missing-values-check', methods=['POST'])
+def extension_validation_min_non_missing_values_check():
     extension = request.get_json()
-    print("Extension Transformation AggregateAccumulative:", extension)
+    print("Extension Validation MinNonMissingValuesCheck:", extension)
     assert 'extensionId' in extension, f'extensionId should be provided'
     assert 'inputVariables' in extension and isinstance(extension['inputVariables'], list), \
         f'inputVariables should be provided'
@@ -56,15 +56,15 @@ def extension_transformation_aggregate_accumulative():
         "start": request.args.get('from'),
         "end": request.args.get('end'),
     }
-    process_aggregate_accumulative(**trigger_data)
+    process_min_non_missing_values_check(**trigger_data)
 
     del extension['inputVariables']
     del extension['outputVariables']
-    extension['callback'] = f'{util.HOST_URL}/extension/transformation/aggregate-accumulative',
+    extension['callback'] = f'{util.HOST_URL}/extension/validation/min-non-missing-values-check',
     return jsonify(extension)
 
 
-def process_aggregate_accumulative(input_variables=None, output_variables=None, options=None, **kwargs):
+def process_min_non_missing_values_check(input_variables=None, output_variables=None, options=None, **kwargs):
     if options is None:
         options = {}
     if output_variables is None:
